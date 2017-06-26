@@ -1,25 +1,29 @@
 {
   "name": "lets-get-functional",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Getting jiggy with higer order functions",
   "main": "index.js",
+  "license": "MIT",
   "scripts": {
     "test": "istanbul cover _mocha -- test/ -R spec"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OperationSpark/lets-get-functional.git"
+    "url": "git+https://github.com/matdavis2121/lets-get-functional.git"
   },
   "author": "jfraboni",
   "bugs": {
-    "url": "https://github.com/OperationSpark/lets-get-functional/issues"
+    "url": "https://github.com/matdavis2121/lets-get-functional/issues"
   },
-  "homepage": "https://github.com/OperationSpark/lets-get-functional#readme",
+  "homepage": "https://github.com/matdavis2121/lets-get-functional#readme",
   "devDependencies": {
     "chai": "^3.5.0",
     "i": "^0.3.5",
     "istanbul": "^0.4.4",
     "mocha": "^2.5.3",
     "sinon": "^1.17.4"
+  },
+  "dependencies": {
+    "lowdown-matdavis2121": "^1.0.1"
   }
 }

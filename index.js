@@ -83,7 +83,7 @@ allBalances = _.reduce(allBalancesNoSymbol, function(p, e, i){
 });
 
 var avgBalance = allBalances/(customers.length);
-console.log("5. The average balance = $" + Math.floor(avgBalance))    
+console.log("5. The average customer balance = $" + Math.round(avgBalance))    
 
 
 //----QUESTION # 6 - ARBITRARY LETTER STARTER PART 1-----
@@ -98,7 +98,7 @@ var count = 0;
     return count;
 }
 
-console.log("6. Total # of customers names starting with random letter = " 
+console.log("6. Total # of customers names starting with the random letter 'o' = " 
             + beginWithRandomLetter("o"))
 
 
@@ -123,7 +123,7 @@ var count = 0;
     return count;
 }
 
-console.log("7. Total # of customer's friend's names starting with random letter = " 
+console.log("7. Total # of customer's friend's names starting with random letter 'c' = " 
             + friendsWithRandomLetter("c"))
 
 
@@ -191,7 +191,8 @@ var numberedTags = []
     _.each(customers, function(v, i, a){
         allTags.push(v.tags)    
     })
-    
+
+//COULD'VE JUST USED ARRAY TO STRING AND IT WOULD TURN THEM ALL THEN > split string by comma    
 allTagsConcat = allTags[0].concat(allTags[1],allTags[2], allTags[3], allTags[4], allTags[5], allTags[6], allTags[7], allTags[8])
 
 uniqueTags = _.unique(allTagsConcat)
@@ -207,7 +208,7 @@ uniqueTags = _.unique(allTagsConcat)
     })
     
     /*STARTING LOOPING SESSION TO USE MY CUSTOM VERSION OF INDEX OF*/
-    
+    //ON LINE 256
     _.each(uniqueTags, function(uTag, i, a){
         TagCounter1.push(findTotal(numberedTags, uTag))    
     })
@@ -248,10 +249,9 @@ uniqueTags = _.unique(allTagsConcat)
     
     //REMOVE ALL EXCEPT TOP 3 - CONSOLE.LOG CONCATTED STATEMENT
     Top3_NoCount.splice(3, Top3.length)
-    console.log
     
     //FUNCTION MADE TO RUN ON EACH UNIQUE TAG AGAINST FULL LIST OF TAGS
-    //USED ON LINE 212
+    //USED ON LINE 212////////////////////////////////////////////////
     function findTotal(array, value){
         var counter = 0
         var result
@@ -261,7 +261,8 @@ uniqueTags = _.unique(allTagsConcat)
             }
         })
         return result
-    } //ENDOF: findTotal
+    } //ENDOF: findTotal/////////////////////////////////////////////////
+    
      return ("9. The Top 3 tags are: " + "1. " + Top3_NoCount[0] + 
                 ", 2. " + Top3_NoCount[1]+ ", 3. " + Top3_NoCount[2])
 } //ENDOF: ENTIRE-MAIN FUNCTION
@@ -315,3 +316,36 @@ var genderSummary = {};
 console.log("10. The Customers by Gender Report: " + CustomersByGender())
 
 
+//----------------QUESTION # 10 - USING REDUCE CREATE A SUMMARY OF GENDERS---------------------------
+
+var maleReport = genderReport("male")
+var femaleReport = genderReport("female") 
+var transgenderReport = genderReport("transgender")
+
+
+function genderReport(gender){
+    var reduceResult
+    var Counter=0
+    var allGendersReduced = _.reduce(customers, function(p, e, i){
+    //ONLY CHECKS FOR 1 VALUE IN A COLLECTION
+    if(e.gender === gender){
+        reduceResult = e.gender + ": " + (Counter+=1) + ", "; p = reduceResult}
+    
+    //REDUCES AMOUNT OF UNNECESSARY RETURNS
+    if(e.gender !== gender){return p}
+    
+    //PREVENTS CONCATTING
+    if(p[p.length-2] === p[p.length-1]) {p = p.slice(0, p.length-1)}
+    //console.log(p)
+    return p
+    }, "START - ")
+    return allGendersReduced
+}
+console.log("10-2. The Customers Gender Report = " + maleReport + femaleReport + transgenderReport)
+
+/* Build a function similar to above but with another layer
+    1. it will take AN ARRAY ARG, VALUE ARGS
+    2. these will be ran on an array or an array of arrays
+    3. then it will format a report for each value
+    4. The function will contain a function which contains a function
+    5. return an array of */

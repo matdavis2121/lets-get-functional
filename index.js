@@ -180,12 +180,13 @@ console.log("8b. She is on the friends list of: " + findWhosListImOn("Shelly Wal
 
 
 //----------------QUESTION # 9 - TOP 3 MOST COMMON TAGS---------------------------
+/* 06/27/2017 02:00:48 -- COULD'VE JUST USED .toString() then .split(",") */ 
+/* will rework and redesign LATER - COMPLETED! 06/27/2017 03:30:11 */
 function top3Tags(){
 var allTags = [];
 var allTagsConcat
 var uniqueTags
-var TagCounter1
-var counter 
+var TagCounter1 = [];
 var numberedTags = []
     _.each(customers, function(v, i, a){
         allTags.push(v.tags)    
@@ -197,7 +198,6 @@ uniqueTags = _.unique(allTagsConcat)
     //console.log(uniqueTags.sort())
     //console.log(allTagsConcat)
     _.each(uniqueTags, function(v, i, a){
-        counter = 0
         _.each(allTagsConcat, function(e, ind, arr){
             if(v === e){
                 numberedTags.push(v)
@@ -207,63 +207,111 @@ uniqueTags = _.unique(allTagsConcat)
     })
     
     /*STARTING LOOPING SESSION TO USE MY CUSTOM VERSION OF INDEX OF*/
-    var total1 = findTotal(numberedTags, uniqueTags[0])
     
+    _.each(uniqueTags, function(uTag, i, a){
+        TagCounter1.push(findTotal(numberedTags, uTag))    
+    })
+    
+    //Organizes by lowest to highest count
+    TagCounter1.sort()
+    
+    //find the highest count = HOW MANY TIMES DOES THIS TAG OCCUR IN ARRAY?
+    var highestCount = TagCounter1[TagCounter1.length - 1][0]
+    
+    //using MAP to only give me highest
+    
+    var mapResults = _.map(TagCounter1, function(v, i, a){
+            
+        if(v[0] === highestCount){
+            return v
+        }
+    });
+    
+    //map returns for EVERY ELEMENT so if the function return value for the run
+    //of that function is UNDEFINED, UNDEFINED is returned
+    var Top3 = mapResults.slice(mapResults.lastIndexOf(undefined) + 1)
+    
+    //SPLICE ARGS = arg0-where to start, arg1-how many to remove, arg2-what to add in
+    /*TIPS: a. if the 2nd, remove argument is higher than the length of array,
+                all elements after the start point but before the out of reach value
+                will be removed and the splice effect will still take place*/
+        /*  b. SPLICE changes the original array
+            c. SLICE returns a new array with the original unchanged*/
+    
+    //Sort the list of tags occuring 3x THEN remove all except TOP 3
+    //Lorem is one bc of the hexavalue
+    Top3.sort()
+    var Top3_NoCount = []
+    _.each(Top3, function(v,i,a){
+        Top3_NoCount.push(v.slice(2))
+    })
+    
+    //REMOVE ALL EXCEPT TOP 3 - CONSOLE.LOG CONCATTED STATEMENT
+    Top3_NoCount.splice(3, Top3.length)
+    console.log
+    
+    //FUNCTION MADE TO RUN ON EACH UNIQUE TAG AGAINST FULL LIST OF TAGS
+    //USED ON LINE 212
     function findTotal(array, value){
-        var totalArray = [];
-        var finalArray = []
+        var counter = 0
+        var result
         _.each(array, function(e, i, a){
-            if(value === e && i === array.length -1){
-                finalArray.push(totalArray.length)
-            } else if(value !== e && i === array.length -1){
-                finalArray.push(totalArray.length)
-            } else if( value === e){
-                totalArray.push()
+            if(e === value){
+                result = ((counter += 1) + " " + e)
             }
         })
-        return finalArray
-    }
-    
-console.log(total1)
-    //return allTags
-}
-
-
+        return result
+    } //ENDOF: findTotal
+     return ("9. The Top 3 tags are: " + "1. " + Top3_NoCount[0] + 
+                ", 2. " + Top3_NoCount[1]+ ", 3. " + Top3_NoCount[2])
+} //ENDOF: ENTIRE-MAIN FUNCTION
 console.log(top3Tags())
 
 
-
-
-/*function top3Tags(){
-var allTags = []
-var uniqueTags = []
-var topTagsTotal = []
-var counter = []
-    _.each(customers, function(obj, i, a){
-        allTags = allTags.concat(obj.tags)
-    console.log(obj.tags + " number of x's = " + i)
+//----------------QUESTION # 10 - CREATE A SUMMARY OF GENDERS---------------------------
+function CustomersByGender(){
+var genderSummary = {};
+    
+    //CONFIRMING: the gender property exist
+    //Only confirming for 1st object which can be FAULTY but works here
+    //In the future, set a condition like this in a EACH LOOP not as the GATE KEEPER
+    if(customers[0].gender){
+    var allGenders = _.pluck(customers, "gender")
+    } else {console.log("NO GENDER")}
+    
+    var onlyEachGender = _.unique(allGenders) 
+    _.each(onlyEachGender, function(v, i, a){
+        genderSummary[v] = findGenderTotal(allGenders, v) 
+    })
+    
+    /////////////////////////////////////////////
+        var maleReport
+        var femaleReport
+        var transgenderReport
+    function findGenderTotal(array, value){
+        //Designed as an outside function to run on each element
+        //This way, I can run as many times on each element without a double each loop
+        var counter = 0
+        var result
         
-    })
-    
-    
-    uniqueTags = _.unique(allTags)
-    
-    
-    _.each(uniqueTags, function(v, i, a){
-        if(uniqueTags){
-        counter = 0
-        }
-        _.each(allTags, function(eachTag, tagIndex, allTags){
-            
-            if(v === eachTag){
-               counter = counter + 1  
-               
-            } else if(tagIndex === 55){
-                topTagsTotal.push(counter + " " + uniqueTags)
-            } 
+        _.each(array, function(e, i, a){
+            if(e === value){
+                result = (counter += 1)
+            }
         })
-    })
+        
+        //CREATE custom string for each gender
+        if(value === "female"){femaleReport = value + ": " + result + ","}
+        else if(value === "male"){maleReport = value + ": " + result + ","}
+        else if(value === "transgender"){transgenderReport = value + ": " + result + " "}
+        
+        return result
+    } //ENDOF: findTotal////////////////////////
     
-    return topTagsTotal
-    //return topTagsTotal.sort().reverse().slice(0,1)
-}*/
+    var finalReport = maleReport + " " + femaleReport + " " + transgenderReport + " "
+    return finalReport            
+}
+
+console.log("10. The Customers by Gender Report: " + CustomersByGender())
+
+

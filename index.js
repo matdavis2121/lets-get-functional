@@ -55,16 +55,16 @@ _.each(customers, function(v, i, a){
     _.each(v, function(pVal, k, o){
         if(k === "age" && pVal === allAges.sort()[0]){
             //console.log("YOUNGEST = " +o.age + " - " + o.name)
-            youngest.push(o.name)
+            youngest.push(o.name + " " + o.age)
         } else if (k === "age" && pVal === allAges.sort()[allAges.length -1]){
             //console.log("OLDEST = " + o.age + " - " + o.name)
-            oldest.push(o.name)            
+            oldest.push(o.name + " " + o.age)            
         }
     })
 })
 
 console.log("3. This is the oldest customer - " + oldest)
-console.log("4. These are the youngest customers - " + youngest)
+console.log("4. These are the youngest customers - " + youngest[0] + ", " +youngest[1] )
 
 
 //----QUESTION # 5 - AVERAGE BALANCE OF ALL CUSTOMERS-----
